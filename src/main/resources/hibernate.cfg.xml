@@ -8,11 +8,13 @@
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/AlienDB</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">password</property>
+        <property name="hibernate.show_sql">true</property>
 
         <!-- Specify dialect -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hibernate.hbm2ddl.auto">create</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+<!--        <property name="hibernate.format_sql">true</property>-->
     </session-factory>
 </hibernate-configuration>

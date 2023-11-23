@@ -11,7 +11,7 @@ public class Teacher {
     private int id;
     private String name;
 
-    @ManyToMany(mappedBy = "teachers")
+    @ManyToMany(mappedBy = "teachers", fetch = FetchType.EAGER)
     private List<Student> students;
 
     public Teacher() {

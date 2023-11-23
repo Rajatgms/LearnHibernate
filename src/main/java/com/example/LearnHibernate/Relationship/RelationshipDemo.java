@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RelationshipDemo {
@@ -28,11 +29,20 @@ public class RelationshipDemo {
         Transaction transaction = session.beginTransaction();
         session.save(teacher);
         session.save(student);
-
-        Teacher teacher1 = (Teacher) session.get(Teacher.class, 1);
-        Student student1 = (Student) session.get(Student.class, 1);
         transaction.commit();
 
-        System.out.println(teacher1.getName() + " teaches " + student1.getName());
+        Teacher teacher1 = session.get(Teacher.class, 1);
+        Student student1 = session.get(Student.class, 1);
+
+        System.out.println(teacher1.getName());
+
+        // If below code is commented and FetchType is lazy, Join Statement or Associate Table would not be accessed
+        for (Student s: teacher1.getStudents()){
+            System.out.println(teacher1.getName() + " teaches " + s.getName());
+        }
+
+        for (Teacher t: student1.getTeachers()){
+            System.out.println(t.getName() + " teaches " + student1.getName());
+        }
     }
 }
