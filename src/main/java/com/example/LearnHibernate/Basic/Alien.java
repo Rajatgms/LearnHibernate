@@ -1,4 +1,4 @@
-package com.example.LearnHibernate;
+package com.example.LearnHibernate.Basic;
 
 import jakarta.persistence.*;
 

@@ -1,11 +1,11 @@
-package com.example.LearnHibernate;
+package com.example.LearnHibernate.Basic;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-public class LearnHibernate {
+public class AlienDemo {
     public static void main(String[] args) {
         Alien alien = new Alien();
         alien.setId(101);
