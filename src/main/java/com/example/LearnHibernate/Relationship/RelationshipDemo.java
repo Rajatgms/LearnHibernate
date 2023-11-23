@@ -35,24 +35,30 @@ public class RelationshipDemo {
         transaction1.commit();
 
         // Session 1 get Teacher 1 detail
+        System.out.println("Session 1 accessing Teacher - 1, one times");
         teacher1 = session1.get(Teacher.class, 1);
-//        session1.close();
+        session1.close();
 
         Session session2 = sessionFactory.openSession();
         Transaction transaction2 = session2.beginTransaction();
 
         // Session 2 get Teacher 1 detail
+        System.out.println("Session 2 accessing Teacher - 1, one times");
         teacher1 = session2.get(Teacher.class, 1);
         transaction2.commit();
+        session2.close();
 
         Session session3 = sessionFactory.openSession();
-        Transaction transaction3 = session2.beginTransaction();
+        Transaction transaction3 = session3.beginTransaction();
 
         // Session 3 two time get Teacher 1 detail
+        System.out.println("Session 3 accessing Teacher - 1, two times");
         teacher1 = session3.get(Teacher.class, 1);
         teacher1 = session3.get(Teacher.class, 1);
-        transaction2.commit();
+        transaction3.commit();
+        session3.close();
 
         System.out.println(teacher1.getName());
+
     }
 }
