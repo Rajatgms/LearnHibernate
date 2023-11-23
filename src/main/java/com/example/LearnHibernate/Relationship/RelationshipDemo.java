@@ -25,24 +25,34 @@ public class RelationshipDemo {
 
         Configuration configuration = new Configuration().configure().addAnnotatedClass(Teacher.class).addAnnotatedClass(Student.class);
         SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(teacher);
-        session.save(student);
-        transaction.commit();
 
-        Teacher teacher1 = session.get(Teacher.class, 1);
-        Student student1 = session.get(Student.class, 1);
+        Teacher teacher1 = null;
+
+        Session session1 = sessionFactory.openSession();
+        Transaction transaction1 = session1.beginTransaction();
+        session1.save(teacher);
+        session1.save(student);
+        transaction1.commit();
+
+        // Session 1 get Teacher 1 detail
+        teacher1 = session1.get(Teacher.class, 1);
+//        session1.close();
+
+        Session session2 = sessionFactory.openSession();
+        Transaction transaction2 = session2.beginTransaction();
+
+        // Session 2 get Teacher 1 detail
+        teacher1 = session2.get(Teacher.class, 1);
+        transaction2.commit();
+
+        Session session3 = sessionFactory.openSession();
+        Transaction transaction3 = session2.beginTransaction();
+
+        // Session 3 two time get Teacher 1 detail
+        teacher1 = session3.get(Teacher.class, 1);
+        teacher1 = session3.get(Teacher.class, 1);
+        transaction2.commit();
 
         System.out.println(teacher1.getName());
-
-        // If below code is commented and FetchType is lazy, Join Statement or Associate Table would not be accessed
-        for (Student s: teacher1.getStudents()){
-            System.out.println(teacher1.getName() + " teaches " + s.getName());
-        }
-
-        for (Teacher t: student1.getTeachers()){
-            System.out.println(t.getName() + " teaches " + student1.getName());
-        }
     }
 }
