@@ -1,11 +1,15 @@
 package com.example.LearnHibernate.Relationship;
 
+import net.sf.ehcache.search.expression.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
+import org.hibernate.query.sql.internal.SQLQueryParser;
 
+import java.sql.SQLData;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,45 +35,24 @@ public class RelationshipDemo {
         session.save(teacher);
         session.save(student);
 
-        Query query = session.createQuery("FROM Teacher WHERE id=1");
-        teacher = (Teacher) query.uniqueResult();
+        NativeQuery query1 = session.createNativeQuery("SELECT * FROM Teacher");
+        query1.addEntity(Teacher.class);
+        List<Teacher> teacherList1 = query1.getResultList();
 
-        Query listQuery = session.createQuery("FROM Teacher");
-        List<Teacher> teacherList = listQuery.list();
-
-        Query listNameQuery = session.createQuery("SELECT name FROM Teacher");
-        List<String> teacherNames = listNameQuery.list();
-
-        Query listIDNameQuery = session.createQuery("SELECT id, name FROM Teacher");
-        List<Object[]> teacherIDNames = listIDNameQuery.list();
-
-
-        Query listInputQuery = session.createQuery("SELECT id, name FROM Teacher t WHERE t.id =:id");
-        listInputQuery.setParameter("id", 1);
-
-        List<Object[]> teacherWithInput = listInputQuery.list();
-
+        NativeQuery query2 = session.createNativeQuery("SELECT id, name FROM Teacher");
+        List<Object[]> teacherList2 = query2.getResultList();
 
         transaction.commit();
         session.close();
 
         System.out.println(teacher.getName());
 
-        for (Teacher t: teacherList) {
+        for (Teacher t : teacherList1) {
             System.out.println(t.getName());
         }
 
-        for (String tName: teacherNames) {
-            System.out.println(tName);
+        for (Object[] o : teacherList2) {
+            System.out.println(o[1]);
         }
-
-        for (Object[] tIdName: teacherIDNames) {
-            System.out.println(tIdName[1]);
-        }
-
-        for (Object[] tIdName: teacherWithInput) {
-            System.out.println(tIdName[1]);
-        }
-
     }
 }
