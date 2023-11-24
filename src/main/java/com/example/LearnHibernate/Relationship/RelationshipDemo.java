@@ -26,29 +26,50 @@ public class RelationshipDemo {
 
         Teacher teacher1 = null;
 
-        Session session1 = sessionFactory.openSession();
-        Transaction transaction1 = session1.beginTransaction();
-        session1.save(teacher);
-        session1.save(student);
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(teacher);
+        session.save(student);
 
-        Query query1 = session1.createQuery("FROM Teacher WHERE id=1");
-        query1.setCacheable(true);
-        teacher1 = (Teacher) query1.uniqueResult();
+        Query query = session.createQuery("FROM Teacher WHERE id=1");
+        teacher = (Teacher) query.uniqueResult();
 
-        transaction1.commit();
-        session1.close();
+        Query listQuery = session.createQuery("FROM Teacher");
+        List<Teacher> teacherList = listQuery.list();
 
-        Session session2 = sessionFactory.openSession();
-        Transaction transaction2 = session1.beginTransaction();
+        Query listNameQuery = session.createQuery("SELECT name FROM Teacher");
+        List<String> teacherNames = listNameQuery.list();
 
-        Query query2 = session1.createQuery("FROM Teacher WHERE id=1");
-        query2.setCacheable(true);
-        teacher1 = (Teacher) query2.uniqueResult();
-        
-        transaction2.commit();
-        session2.close();
+        Query listIDNameQuery = session.createQuery("SELECT id, name FROM Teacher");
+        List<Object[]> teacherIDNames = listIDNameQuery.list();
 
-        System.out.println(teacher1.getName());
+
+        Query listInputQuery = session.createQuery("SELECT id, name FROM Teacher t WHERE t.id =:id");
+        listInputQuery.setParameter("id", 1);
+
+        List<Object[]> teacherWithInput = listInputQuery.list();
+
+
+        transaction.commit();
+        session.close();
+
+        System.out.println(teacher.getName());
+
+        for (Teacher t: teacherList) {
+            System.out.println(t.getName());
+        }
+
+        for (String tName: teacherNames) {
+            System.out.println(tName);
+        }
+
+        for (Object[] tIdName: teacherIDNames) {
+            System.out.println(tIdName[1]);
+        }
+
+        for (Object[] tIdName: teacherWithInput) {
+            System.out.println(tIdName[1]);
+        }
 
     }
 }
